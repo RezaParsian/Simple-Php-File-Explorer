@@ -1,11 +1,24 @@
 <?php
 ini_set('display_errors', 1);
+date_default_timezone_set('Asia/Tehran');
 
 function Number_Desimal($number)
 {
     return number_format((float)$number, 2, '.', '');
 }
 
+function filsize_32b($file) {
+    if(substr(PHP_OS, 0, 3) == "WIN")
+    {
+        exec('for %I in ("'.$file.'") do @echo %~zI', $output);
+        $return = $output[0];
+    }
+    else
+    {
+        $return = filesize($file);
+    }
+    return $return;
+}
 
 function Hajm($size)
 {
@@ -204,7 +217,7 @@ foreach ($found as $file) {
                                 <td class="column-2"><?= $dir ?></td>
                                 <td class="column-3">Dir</td>
                                 <td class="column-4"> - </td>
-                                <td class="column-5" date="<?= date("Y-m-d H:i:s", filectime($path . "/" . $dir)) ?>"><?= $filedate ?></td>
+                                <td class="column-5"><?= $filedate ?></td>
                                 <td class="column-6"><?= $filetime ?></td>
                                 <td class="column-7 text-rose"> - </td>
                                 <td class="column-8"><a href="?path=<?= $path . "/" . $dir ?>" class="btn btn-outline-success btn-sm btn-block" role="button" rel="noopener noreferrer">ورود</a></td>
@@ -217,10 +230,10 @@ foreach ($found as $file) {
                     foreach ($files as $file) {
                         $mime_type = explode(".", $file);
                         $mime_type = end($mime_type);
-                        $filesize = filesize($path . "/" . $file);
-                        $filesize = Number_Desimal((int)$filesize);
-                        $filedate = date("Y-m-d", filectime($path . "/" . $dir));
-                        $filetime = date("H:i:s", filectime($path . "/" . $dir));
+                        $fl=$path . "/" . $file;
+                        $filesize = filsize_32b($fl);//filesize($path . "/" . $file);
+                        $filedate = date("Y-m-d", filectime($path . "/" . $file));
+                        $filetime = date("H:i:s", filectime($path . "/" . $file));
                         if (!in_array($file, $except_file) && !in_array($mime_type, $except_type)) {
                     ?>
                             <tr class="row-2 even">
@@ -228,7 +241,7 @@ foreach ($found as $file) {
                                 <td class="column-2"><?= $file ?></td>
                                 <td class="column-3"><?= strtoupper($mime_type) ?></td>
                                 <td class="column-4"><?= isset($mime_types[$mime_type]) ? $mime_types[$mime_type] : "" ?></td>
-                                <td class="column-5" date="<?= date("Y-m-d H:i:s", filectime($path . "/" . $dir)) ?>"><?= $filedate ?></td>
+                                <td class="column-5"><?= $filedate ?></td>
                                 <td class="column-6"><?= $filetime ?></td>
                                 <td style="direction: rtl;" class="column-7 text-rose"><?= Hajm($filesize) ?></td>
                                 <td class="column-8"><a target="_blank" href="<?= $path . "/" . $file ?>" class="btn btn-outline-success btn-sm btn-block" role="button" rel="noopener noreferrer">دانلود</a></td>
