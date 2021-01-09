@@ -1,6 +1,6 @@
 # Simple-Php-File-Explorer
 A Simple PHP File Explorer. The code is a single php file.
-
+  
 <h1>Why it is good</h1>
 <ul>
 <li>Single file, there are no images, or css folders.</li>
